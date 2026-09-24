@@ -1,18 +1,9 @@
-// Luz & Cia — schema do painel administrável
-// ─────────────────────────────────────────────────────────────
-// AMBIENTE LOCAL (sandbox): SQLite (padrão abaixo).
-// IMPLANTAÇÃO VERCEL (Neon/Supabase/Vercel Postgres):
-//   1) troque:  provider = "postgresql"
-//   2) use:     url      = env("DATABASE_URL")   (ex.: postgresql://...?sslmode=require)
-//   3) rode localmente: npx prisma migrate dev --name init  → commit da pasta migrations
-//   4) no build da Vercel: "prisma migrate deploy && prisma generate && next build"
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -21,7 +12,7 @@ model AdminUser {
   id           String   @id @default(cuid())
   name         String
   email        String   @unique
-  passwordHash String // scrypt: "salt:hash" (node:crypto, sem dependências extras)
+  passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -42,8 +33,8 @@ model BlogPost {
   metaDescription String?
   keywords        String?
   excerpt         String
-  content         String // mini-markdown: ## título, ### subtítulo, - lista, **negrito**
-  coverImage      String? // URL opcional (imagem externa)
+  content         String
+  coverImage      String?
   published       Boolean  @default(false)
   publishedAt     DateTime @default(now())
   createdAt       DateTime @default(now())
