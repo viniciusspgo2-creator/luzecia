@@ -5,7 +5,7 @@
   "description": "Luz & Cia — site institucional (migração PHP → Next.js 16)",
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "eslint .",
     "postinstall": "prisma generate",
