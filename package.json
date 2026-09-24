@@ -1,0 +1,30 @@
+{
+  "name": "luz-cia-site",
+  "version": "4.1.0",
+  "private": true,
+  "description": "Luz & Cia — site institucional (migração PHP → Next.js 16)",
+  "scripts": {
+    "dev": "next dev -p 3000 2>&1 | tee dev.log",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "postinstall": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "bun scripts/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.16.3",
+    "next": "^16.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^16.1.1",
+    "prisma": "6.16.3",
+    "typescript": "^5"
+  }
+}

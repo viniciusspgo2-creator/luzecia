@@ -1,0 +1,74 @@
+// Luz & Cia — schema do painel administrável
+// ─────────────────────────────────────────────────────────────
+// AMBIENTE LOCAL (sandbox): SQLite (padrão abaixo).
+// IMPLANTAÇÃO VERCEL (Neon/Supabase/Vercel Postgres):
+//   1) troque:  provider = "postgresql"
+//   2) use:     url      = env("DATABASE_URL")   (ex.: postgresql://...?sslmode=require)
+//   3) rode localmente: npx prisma migrate dev --name init  → commit da pasta migrations
+//   4) no build da Vercel: "prisma migrate deploy && prisma generate && next build"
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/** Usuário do painel /admin — criado no PRIMEIRO acesso (/admin/setup). */
+model AdminUser {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String // scrypt: "salt:hash" (node:crypto, sem dependências extras)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/** Textos editáveis do site (chave → valor). Defaults vivem em src/lib/content.ts. */
+model SiteContent {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+/** Artigos do blog. */
+model BlogPost {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  excerpt         String
+  content         String // mini-markdown: ## título, ### subtítulo, - lista, **negrito**
+  coverImage      String? // URL opcional (imagem externa)
+  published       Boolean  @default(false)
+  publishedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+/** Configuração de SEO por página ("global", "home", "sobre", ...). */
+model SeoPage {
+  page        String  @id
+  title       String?
+  description String?
+  keywords    String?
+  ogImage     String?
+  updatedAt   DateTime @updatedAt
+}
+
+/** Contador de visitas agregado por dia (YYYY-MM-DD, fuso America/Cuiaba). */
+model VisitDay {
+  day   String @id
+  views Int    @default(0)
+}
+
+/** Contador de visitas agregado por rota. */
+model VisitPath {
+  path     String   @id
+  views    Int      @default(0)
+  lastView DateTime @default(now())
+}
