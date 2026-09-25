@@ -5,11 +5,6 @@ import { getSeoConfig } from "@/lib/seo";
 import { getSiteContent } from "@/lib/content";
 import { SITE_URL } from "@/config/site";
 
-/**
- * Tipografia aprovada do site original (Google Fonts no PHP),
- * agora com carregamento otimizado via next/font — mesmas famílias e pesos.
- * As variáveis também alimentam o CSS do painel /admin.
- */
 const manrope = Manrope({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -23,6 +18,8 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   display: "swap",
 });
+
+export const dynamic = "force-dynamic";
 
 /** Metadados globais — controlados pelo painel (/admin/seo → "Global"). */
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,9 +41,6 @@ export async function generateMetadata(): Promise<Metadata> {
       .map((k) => k.trim())
       .filter(Boolean),
     icons: { icon: "/img/logo-symbol.png" },
-    // Google Search Console: cole o código de verificação (valor do content=)
-    // na variável GOOGLE_SITE_VERIFICATION (ver .env.example). Opcional —
-    // também é possível verificar via registro DNS.
     ...(process.env.GOOGLE_SITE_VERIFICATION
       ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
       : {}),
