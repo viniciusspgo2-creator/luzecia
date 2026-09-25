@@ -1,3 +1,5 @@
+// Luz & Cia — schema do painel administrável
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,7 +9,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/** Usuário do painel /admin — criado no PRIMEIRO acesso (/admin/setup). */
 model AdminUser {
   id           String   @id @default(cuid())
   name         String
@@ -17,14 +18,12 @@ model AdminUser {
   updatedAt    DateTime @updatedAt
 }
 
-/** Textos editáveis do site (chave → valor). Defaults vivem em src/lib/content.ts. */
 model SiteContent {
   key       String   @id
   value     String
   updatedAt DateTime @updatedAt
 }
 
-/** Artigos do blog. */
 model BlogPost {
   id              String   @id @default(cuid())
   slug            String   @unique
@@ -41,7 +40,6 @@ model BlogPost {
   updatedAt       DateTime @updatedAt
 }
 
-/** Configuração de SEO por página ("global", "home", "sobre", ...). */
 model SeoPage {
   page        String  @id
   title       String?
@@ -51,13 +49,11 @@ model SeoPage {
   updatedAt   DateTime @updatedAt
 }
 
-/** Contador de visitas agregado por dia (YYYY-MM-DD, fuso America/Cuiaba). */
 model VisitDay {
   day   String @id
   views Int    @default(0)
 }
 
-/** Contador de visitas agregado por rota. */
 model VisitPath {
   path     String   @id
   views    Int      @default(0)
